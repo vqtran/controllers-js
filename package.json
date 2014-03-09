@@ -1,0 +1,22 @@
+{
+  "name": "Controllers.js",
+  "description": "Simple MVC-style controllers for Express.js",
+  "version": "0.0.0",
+  "author": "Vinh Tran",
+  "repository": {
+      "type": "git",
+      "url": "git://github.com/vqtran/Controllers.js"
+  },
+  "contributors": [],
+  "dependencies": {
+    "express": "3.x.x",
+    "require-dir": "0.1.0",
+    "methods": "0.1.0"
+  },
+  "keywords": ["express", "controllers", "mvc", "routes", "simple"],
+  "main": "index"
+  "engines": {
+    "node": ">= 0.8.0",
+    "npm": "1.3.x"
+  }
+}
