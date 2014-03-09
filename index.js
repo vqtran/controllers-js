@@ -4,23 +4,39 @@
  * MIT Licensed
  */
 
-var express = require("express"),
-    app = express.application,
-    requireDir = require('require-dir'),
+var requireDir = require('require-dir'),
     methods = require('methods'),
     fs = require('fs'),
     Exception = require('./lib/exceptions.js'),
-    DEFAULT_PATH = __dirname + "/app/controllers";
+    ROOT = __dirname + "../../..",
+    DEFAULT_PATH = ROOT + "/app/controllers";
+
+var app;
 
 /* Controllers.js - Simply adding MVC-style controllers to Express.js
  *
  * For every file in the top level of controllers, attach the all paths
  * and respective handlers found in the controller to the Express app.
 */
-app.controllers = function(options) {
-    /* If path is specified override use that instead. */
-    if ('path' in options) {
-        DEFAULT_PATH = options['path'];
+
+function init(_app) {
+    app = _app;
+    /* Patches Express app to have function to load controllers */
+    app.controllers = controllers;
+}
+
+/* Exposes init for usage as require("controllers-js")(app) */
+module.exports = init;
+
+/* This method is patched onto the Express app
+ * When called, loads all controllers and attaches them to the express app. 
+ */
+function controllers(options) {
+    if (options) {
+        /* If path is specified override use that instead. */
+        if (options['path']) {
+            DEFAULT_PATH = ROOT + options['path'];
+        }
     }
     /* Require controller files and attach all controllers
      * to the express app */
@@ -53,7 +69,7 @@ function attachController(controller, info) {
 function attachRoute(config, handler, info) {
     /* Only if it is a support http verb */
     if (isValidHttpVerb(config.action)) {
-        /* attaches to express */
+        /* attaches to express app*/
         app[config.action](config.path, handler);
     }
     else Exception.InvalidHttpVerb(info.controller_name, info.route, config.action);
