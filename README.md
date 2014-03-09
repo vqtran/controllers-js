@@ -8,8 +8,8 @@ Patches the Express app to support app.controllers() which loads all controller 
 
 ## Installation & Usage
 `npm install controllers-js` or add it to your package.json.
-
-`var express = require('express');
+```
+var express = require('express');
 var app = express();
 require('controllers-js')(app);
 
@@ -20,8 +20,8 @@ app.configure(function () {
 });
 
 var port = process.env.PORT || 8080;
-app.listen(port);`
-
+app.listen(port);
+```
 It also takes a specific controllers directory path: `app.controllers({path: '/directory'})`
 
 ## How to Write Controllers
@@ -36,8 +36,8 @@ All .js files in `/specified/controller/path` will be loaded.
 All controllers do their own routing, and provide the handlers for these routes.
 
 Ex: `/specfied/controller/path/index.js`
-
-`var index = exports = module.exports = {};
+```
+var index = exports = module.exports = {};
 
 // Special routes object used in controller-js
 index.routes = {
@@ -54,7 +54,8 @@ index.get = function(req, res) {
 index.query = function(req,res) {
     var message = req.params['message'];
     res.send(message);
-}`
+}
+```
 
 The exported routes object contains keys corresponding to the exported handler functions, and are mapped to an object with the fields `action` and `path`. `action` specifies the HTTP verb, as if you would call app.get or app.post. `path` specifies the routing path to serve this request, in the same format as you would call in `app.get("/", function)`.
 
