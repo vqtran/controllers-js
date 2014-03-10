@@ -5,7 +5,8 @@ Simply adding MVC-style controllers to Express.js.
 ```
 $ npm install controllers-js
 ```
-or add it to your `package.json` and ```
+or add it to your `package.json` and 
+```
 $ npm install
 ```
 ## Usage
