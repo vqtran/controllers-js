@@ -5,8 +5,7 @@ Simply adding MVC-style controllers to Express.js.
 ```
 $ npm install controllers-js
 ```
-or add it to your `package.json` and 
-```
+or add it to your `package.json` and ```
 $ npm install
 ```
 ## Usage
@@ -76,7 +75,7 @@ export.routes = {
     ...
 }
 ```
-#### `export.route_handler`
+#### `export.<handler_name>`
 For each entry in the routes object, the controller _must_ also export a handler for that route.
 This handler is the same as Express' usual convention:
 ```
