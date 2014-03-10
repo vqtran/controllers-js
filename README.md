@@ -1,8 +1,6 @@
 controllers-js
 ==============
-
 Simply adding MVC-style controllers to Express.js.
-
 ## Install
 ```
 $ npm install controllers-js
@@ -65,20 +63,20 @@ Add any number of routes, or controllers as you'd like, they'll all be automatic
 ## Documentation
 
 ####`app.controllers(option)`
-This method is patched onto Express' normal app object. By default this will look for controller files in the root level of /app/controllers/. If option['path'] is specified, it will look in this directory instead.
+This method is patched onto Express' normal app object. By default this will look for controller files in the root level of `app/controllers`. If `option['path']` is specified, it will look in this directory instead.
 
 ### Controllers
 A controller exports `routes` and each route handler.
 #### `export.routes`
 The routes object is a map of handler names to routes, where each route
-contains an http action, corresponding to Express' app.VERB method, and a path to serve this handler by, also corresponding to Express' convention when used with app.VERB.
+contains an http action, corresponding to Express' `app.VERB` method, and a path to serve this handler by, also corresponding to Express' convention when used with `app.VERB`.
 ```
 export.routes = {
     handler_name1: { action: "get|post|other http verb", path: "/path/toRoute" },
     ...
 }
 ```
-#### 'export.<handler>`
+#### `export.<handler>`
 For each entry in the routes object, the controller _must_ also export a handler.
 This handler is the same as Express' usual convention:
 ```
@@ -86,5 +84,11 @@ export.<handler_name> = function(req, res) {
     ...
 }
 ```
+For nice-ness,
+```
+var handler_name = exports = module.exports = {};
+```
+Will provide a nice way of declaring exported functions/objects by appending it onto this `handler_name` object, instead of typing `export` everytime.
+
 ## License
 MIT License.
