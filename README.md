@@ -56,7 +56,7 @@ index.query = function(req,res) {
 }
 ```
 Your Express app will now have Index's routes/handlers!
-localhost:8080/ will say "Hello World!" and localhost:8080/hi will say "hi".
+`localhost:8080/` will say "Hello World!" and `localhost:8080/hi` will say "hi".
 
 Add any number of routes, or controllers as you'd like, they'll all be automatically attached to your Express app.
 
@@ -76,19 +76,19 @@ export.routes = {
     ...
 }
 ```
-#### `export.<handler>`
-For each entry in the routes object, the controller _must_ also export a handler.
+#### `export.route_handler`
+For each entry in the routes object, the controller _must_ also export a handler for that route.
 This handler is the same as Express' usual convention:
 ```
 export.<handler_name> = function(req, res) {
     ...
 }
 ```
-For nice-ness,
+For nice-ness putting this at the top,
 ```
 var handler_name = exports = module.exports = {};
 ```
-Will provide a nice way of declaring exported functions/objects by appending it onto this `handler_name` object, instead of typing `export` everytime.
+This will provide a nice way of declaring exported functions/objects by appending it onto this `handler_name` object, instead of typing `export` everytime.
 
 ## License
 MIT License.
