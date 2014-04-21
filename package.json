@@ -1,7 +1,7 @@
 {
   "name": "controllers-js",
   "description": "Simple MVC-style controllers for Express.js",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "author": "Vinh Tran",
   "repository": {
       "type": "git",
