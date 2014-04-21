@@ -27,11 +27,12 @@ var express = require('express');
 var app = express();
 require('controllers-js')(app);
 
-app.configure(function () {
-    /* your middleware goes here */
-    ...
-    app.controllers();
-});
+// Some middleware
+// ...
+
+app.controllers();
+
+// more middleware...
 
 var port = process.env.PORT || 8080;
 app.listen(port);
