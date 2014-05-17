@@ -25,7 +25,7 @@ var router;
 module.exports = function(options) {
     /* Check if old user from version 0. */
     if (options.set)
-       throw "Controllers-js as changed, please read the version 1.x documentation.";
+       throw "Controllers-js has changed, please read the version 1.x documentation.";
     router = express.Router();
     buildRouter(options);
     return router;
