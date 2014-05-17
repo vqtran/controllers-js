@@ -4,50 +4,82 @@
  * MIT Licensed
  */
 
-var requireDir = require('require-dir'),
+var express = require('express'),
+    requireDir = require('require-dir'),
     methods = require('methods'),
     fs = require('fs'),
     Exception = require('./lib/exceptions.js'),
-    ROOT = __dirname + "../../..",
+    ROOT = require('path').dirname(require.main.filename),
     DEFAULT_PATH = ROOT + "/app/controllers";
-
-var app;
 
 /* Controllers.js - Simply adding MVC-style controllers to Express.js
  *
  * For every file in the top level of controllers, attach the all paths
- * and respective handlers found in the controller to the Express app.
+ * and respective handlers found in the controller to an instance of an
+ * Express.Router to be used as middleware.
 */
 
-function init(_app) {
-    app = _app;
-    /* Patches Express app to have function to load controllers */
-    app.controllers = controllers;
+var router;
+
+/* Exposes constructor to initalize the Router object */
+module.exports = function(options) {
+    router = express.Router();
+    buildRouter(options);
+    return router;
 }
 
-/* Exposes init for usage as require("controllers-js")(app) */
-module.exports = init;
-
-/* This method is patched onto the Express app
- * When called, loads all controllers and attaches them to the express app. 
- */
-function controllers(options) {
+/* This method attaches all the controllers to the internal router */
+function buildRouter(options) {
+    var controllers, table;
+    /* Handle options */
     if (options) {
-        /* If path is specified override use that instead. */
-        if (options['path']) {
-            DEFAULT_PATH = ROOT + options['path'];
-        }
+        if (options.path)
+            DEFAULT_PATH = ROOT + options.path;
+        if (options.table)
+            table = require(options.table);
     }
-    /* Require controller files and attach all controllers
-     * to the express app */
+    /* Load controllers data */
     controllers = requireDir(DEFAULT_PATH);
+    /* If routing table is provided, load based on the order defined */
+    if (options.table)
+        tableLoad(controllers, table);
+    /* Otherwise, simple load (alphabetic) */
+    else defaultLoad(controllers);
+}
+
+/* Routing table ordered load and attachment of the controllers */
+function tableLoad(controllers, table) {
+    table.forEach(function(route) {
+        /* Check for correct number of params */
+        if (route.length != 4)
+            Exception.RoutingTableParameters(route);
+        /* Parse the route parameters */
+        var verb = route[0].toLowerCase();
+        var path = route[1];
+        var controllerName = route[2];
+        var controllerFunction = route[3];
+        /* Check for errors and attach route */
+        if (isValidHttpVerb(verb)) {
+            if (!controllers[controllerName])
+               Exception.ControllerNotFound(controllerName);
+            if (!controllers[controllerName][controllerFunction])
+               Exception.RouteNotFound(controllerName, controllerFunction);
+            var handler = controllers[controllerName][controllerFunction];
+            router[verb](path, handler);
+        }
+        else Exception.InvalidHttpVerb(controllerName, controllerFunction, verb);
+    });
+}
+
+/* Default-order load and attachment of the controllers */
+function defaultLoad(controllers) {
     for (var c in controllers) {
         attachController(controllers[c], {controller_name: c});
     }
 }
 
 /* Attaches all routes associated with a controller to
- * the express app, like app.get() or app.post()
+ * the router, like router.get() or router.post()
  */
 function attachController(controller, info) {
     for (var route in controller.routes) {
@@ -58,19 +90,19 @@ function attachController(controller, info) {
         /* If the controller has a handler associated with it
          * attach that route/handler to the app */
         if (controller[route]) {
-            info['route'] = route;
+            info.route = route;
             attachRoute(config, handler, info);
         }
         else Exception.RouteNotFound(info.controller_name, route);
     }
 }
 
-/* Attaches a specific route and its handler to the express app */
+/* Attaches a specific route and its handler to the router*/
 function attachRoute(config, handler, info) {
     /* Only if it is a support http verb */
     if (isValidHttpVerb(config.action)) {
-        /* attaches to express app*/
-        app[config.action](config.path, handler);
+        /* attaches to the router*/
+        router[config.action.toLowerCase()](config.path, handler);
     }
     else Exception.InvalidHttpVerb(info.controller_name, info.route, config.action);
 }

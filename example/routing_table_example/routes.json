@@ -1,0 +1,5 @@
+[
+   ["GET", "/", "index", "get"],
+   ["GET", "/:message", "index", "query"],
+   ["GET", "*", "first", "test"]
+]
