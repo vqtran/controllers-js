@@ -91,12 +91,18 @@ Your controllers/routes now will load in the order that you define, and you no l
 ## Documentation
 
 ####`var Controllers = require("controllers-js")`
-Calling this returns a method to initialize the controllers.
+Calling this returns a function to initialize the router for the controllers.
 
-####`Controllers(option)`
-This method returns an Express.Router object with all the correct routes/controllers attached to be used as middleware. By default this will look for controller files in the root level of `app/controllers`. If `option.path` is specified, it will look in this directory instead. 
+####`var controllers = Controllers(option)`
+This function returns an Express.Router object with all the correct routes/controllers attached to be used as middleware. By default this will look for controller files in the root level of `app/controllers`. If `option.path` is specified, it will look in this directory instead. 
 
 If `option.table` is defined, it will use the routing table at that path. Details of using a routing table is explained above, and also available in the examples.
+
+Of course you can also use the short-hand,
+```
+var controllers = require("controllers-js")(options);
+app.use(controllers);
+```
 
 ### Controllers
 A controller exports `routes` (unless a routing table is used) and each route handler.
