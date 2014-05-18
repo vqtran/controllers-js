@@ -68,7 +68,7 @@ As your application grows in complexity it may be wise to declare routes in a ro
 ```
 var express = require('express');
 var app = express();
-var Controllers = require('../../index.js');
+var Controllers = require('controllers-js');
 
 var controllers = Controllers({table: __dirname + "/routes.json"});
 
