@@ -44,7 +44,7 @@ function buildRouter(options) {
     /* Load controllers data */
     controllers = requireDir(DEFAULT_PATH);
     /* If routing table is provided, load based on the order defined */
-    if (options.table)
+    if (table)
         tableLoad(controllers, table);
     /* Otherwise, simple load (alphabetic) */
     else defaultLoad(controllers);
